@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.jar.Attributes;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,8 +41,16 @@ public class MainActivity extends AppCompatActivity {
         boolean haschocolateCream = chocolateCreamCheckBox.isChecked();
 
         int price = calculatePrice(haschocolateCream, hasWhippedCream);
-        String pricemessage = OrderSummary(name, price, hasWhippedCream, haschocolateCream);
-        displayMessage(pricemessage);
+        String priceMessage = OrderSummary(name, price, hasWhippedCream, haschocolateCream);
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_SUBJECT, "just java order for " + name);
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage );
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+        displayMessage(priceMessage);
     }
     /**
      * calculate the price order......
